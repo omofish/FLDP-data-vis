@@ -16,3 +16,6 @@ yarn start
 ```
 
 4. Open http://localhost:3000 to view it in the browser. Any changes you make to the code will be automatically reflected in the browser.
+
+## Credits
+Base Theme is Volt React Dashboard by Themesberg at https://github.com/themesberg/volt-react-dashboard. Awesome stuff!

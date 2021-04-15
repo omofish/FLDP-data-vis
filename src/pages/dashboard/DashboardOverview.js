@@ -10,12 +10,12 @@ export default () => {
     const data = require("../../data/all_experiments.json");
 
     const [activeRun, setActiveRun] = useState(
-        data.find((d) => d.exp == id).title
+        data.find((d) => d.exp == id)
     );
 
     // effect to update active run when exp changes
     useEffect(() => {
-        setActiveRun(data.find((d) => d.exp == id).title);
+        setActiveRun(data.find((d) => d.exp == id));
     }, [id, data, setActiveRun]);
 
     // // effect to update state when new run is selected
@@ -38,7 +38,6 @@ export default () => {
                     <Row>
                         <TrainingChartWidget
                             title={"Run Name"}
-                            data={data}
                             activeRun={activeRun}
                         />
                     </Row>

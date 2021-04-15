@@ -41,16 +41,16 @@ export const SentimentChart = (props) => {
 };
 
 export const TrainingChart = (props) => {
-    const { runData } = props;
+    const { runData, lossMode } = props;
 
     const data = {
         labels: [...Array(75).keys()],
-        series: [runData.acc_test, runData.acc_train],
+        series: lossMode ? [runData.loss_test, runData.loss_train] : [runData.acc_test, runData.acc_train],
     };
 
     const options = {
         low: 0,
-        high: 1,
+        high: lossMode ? 2.5 : 1,
         showArea: false,
         fullWidth: true,
         showPoint: true,

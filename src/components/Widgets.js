@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
@@ -6,6 +6,7 @@ import {
     faChartArea,
     faChartBar,
     faChartLine,
+    faCircle,
     faFlagUsa,
     faFolderOpen,
     faGlobeEurope,
@@ -37,7 +38,6 @@ import {
     SalesValueChartphone,
     TrainingChart,
 } from "./Charts";
-import { match, partial } from "match-json";
 
 import Profile1 from "../assets/img/team/profile-picture-1.jpg";
 import ProfileCover from "../assets/img/profile-cover.jpg";
@@ -47,30 +47,66 @@ import teamMembers from "../data/teamMembers";
 import allStates from "../data/parameters";
 
 export const TrainingChartWidget = (props) => {
-    const { title, data, activeRun } = props;
+    const { title, activeRun } = props;
+    const [lossMode, setLossMode] = useState(false);
 
-    const runData = data.find((x) => x.title === activeRun);
+    const legend  = [
+        {
+            id: 1,
+            label: lossMode ? "Test Loss" : "Test Accuracy",
+            color: "tertiary",
+            icon: faCircle,
+        },
+        {
+            id: 2,
+            label: lossMode ? "Train Loss" : "Train Accuracy",
+            color: "quaternary",
+            icon: faCircle,
+        },
+    ];
 
     return (
         <Card className="bg-secondary-alt shadow-sm">
             <Card.Header className="d-flex flex-row align-items-center flex-0">
                 <div className="d-block">
                     <h5 className="fw-normal mb-2">{title}</h5>
-                    <h3>{activeRun}</h3>
+                    <h3>{activeRun.title}</h3>
                 </div>
                 <div className="d-flex ms-auto">
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => alert(runData.acc_test)}
-                    >
-                        Month
-                    </Button>
+                    <ButtonGroup>
+                        <Button
+                            size="sm"
+                            onClick={() => setLossMode(true)}
+                            variant={lossMode ? "primary" : "outline-primary"}
+                        >
+                            Loss
+                        </Button>
+                        <Button
+                            size="sm"
+                            onClick={() => setLossMode(false)}
+                            variant={lossMode ? "outline-primary" : "primary"}
+                        >
+                            Accuracy
+                        </Button>
+                    </ButtonGroup>
                 </div>
             </Card.Header>
             <Card.Body className="p-2">
-                <TrainingChart runData={runData} />
+                <TrainingChart runData={activeRun} lossMode={lossMode} />
+                <div className="d-flex align-items-center justify-content-center mt-4">
+                    {legend.map((d) => (
+                        <h6
+                            key={`circle-element-${d.id}`}
+                            className="fw-normal text-gray mx-3"
+                        >
+                            <FontAwesomeIcon
+                                icon={d.icon}
+                                className={`icon icon-xs text-${d.color} w-20 me-1`}
+                            />
+                            {` ${d.label} `}
+                        </h6>
+                    ))}
+                </div>
             </Card.Body>
         </Card>
     );
@@ -78,8 +114,6 @@ export const TrainingChartWidget = (props) => {
 
 export const ParameterWidget = (props) => {
     const { expNum, title, data, activeRun, setActiveRun } = props;
-
-    const state = data.find((d) => d.title == activeRun);
 
     const disabledFields = {
         0: [],
@@ -114,10 +148,10 @@ export const ParameterWidget = (props) => {
         const target = e.target;
         const name = target.name;
         const value = target.value;
-        const newState = { ...state, [name]: value };
+        const newState = { ...activeRun, [name]: value };
         const newRun = data.find((x) => isMatch(newState, x));
         console.log(newRun);
-        setActiveRun(newRun.title);
+        setActiveRun(newRun);
     };
 
     const StateButtonGroup = (props) => {
@@ -134,7 +168,7 @@ export const ParameterWidget = (props) => {
                                 value={m}
                                 onClick={(e) => handleInputChange(e)}
                                 variant={
-                                    state[title] === m
+                                    activeRun[title] === m
                                         ? "primary"
                                         : "outline-primary"
                                 }
@@ -164,7 +198,6 @@ export const ParameterWidget = (props) => {
 
     const handleSelectChange = (e) => {
         const title = e.target.value;
-        setActiveRun(e.target.value);
         setActiveRun(data.find((d) => d.title == title));
     };
 

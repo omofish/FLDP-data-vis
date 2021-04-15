@@ -3,7 +3,7 @@ import SimpleBar from "simplebar-react";
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Dropdown } from "@themesberg/react-bootstrap";
 import { Link } from "react-router-dom";
 import { experimentIcons } from "../data/experimentIcons";
@@ -83,6 +83,14 @@ export default (props = {}) => {
                 >
                     <div className="sidebar-inner px-4 pt-3">
                         <Nav className="flex-column pt-3 pt-md-0">
+                            <NavItem
+                                title="Home"
+                                link={Routes.Presentation.path}
+                                icon={faHome}
+                            />
+
+                            <Dropdown.Divider className="my-3 border-indigo" />
+
                             {experimentIcons.map((c) => (
                                 <NavItem
                                     title={c.title}

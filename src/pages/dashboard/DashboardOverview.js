@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Col, Row, Button } from "@themesberg/react-bootstrap";
+import { Col, Row } from "@themesberg/react-bootstrap";
 import {
     TrainingChartWidget,
     ParameterWidget,

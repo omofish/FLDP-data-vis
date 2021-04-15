@@ -3,7 +3,7 @@ import SimpleBar from "simplebar-react";
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Dropdown } from "@themesberg/react-bootstrap";
 import { Link } from "react-router-dom";
 import { experimentIcons } from "../data/experimentIcons";

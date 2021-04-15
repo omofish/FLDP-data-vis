@@ -9,6 +9,7 @@ import DashboardOverview from "./dashboard/DashboardOverview";
 // components
 import Sidebar from "../components/Sidebar";
 import Preloader from "../components/Preloader";
+import Comparison from "./Comparison";
 
 const RouteWithLoader = ({ component: Component, ...rest }) => {
     const [loaded, setLoaded] = useState(false);
@@ -73,6 +74,11 @@ export default () => (
             exact
             path={`${Routes.DashboardOverview.path}/:id`}
             component={DashboardOverview}
+        />
+        <RouteWithSidebar
+            exact
+            path={Routes.Comparison.path}
+            component={Comparison}
         />
     </Switch>
 );

@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown,
     faAngleUp,
+    faArrowDown,
+    faBullseye,
     faChartArea,
     faChartBar,
     faChartLine,
@@ -10,8 +12,10 @@ import {
     faFlagUsa,
     faFolderOpen,
     faGlobeEurope,
+    faGraduationCap,
     faPaperclip,
     faUserPlus,
+    faVial,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faAngular,
@@ -36,6 +40,7 @@ import {
     BarChart,
     SentimentChart,
     SalesValueChartphone,
+    ComparisonChart,
     TrainingChart,
 } from "./Charts";
 
@@ -47,21 +52,20 @@ import teamMembers from "../data/teamMembers";
 import allStates from "../data/parameters";
 
 export const TrainingChartWidget = (props) => {
-    const { title, activeRun } = props;
-    const [lossMode, setLossMode] = useState(false);
+    const { title, activeRun, lossMode, setLossMode } = props;
 
-    const legend  = [
+    const legend = [
         {
             id: 1,
             label: lossMode ? "Test Loss" : "Test Accuracy",
             color: "tertiary",
-            icon: faCircle,
+            icon: lossMode ? faArrowDown : faBullseye,
         },
         {
             id: 2,
             label: lossMode ? "Train Loss" : "Train Accuracy",
             color: "quaternary",
-            icon: faCircle,
+            icon: lossMode ? faArrowDown : faBullseye,
         },
     ];
 
@@ -75,14 +79,14 @@ export const TrainingChartWidget = (props) => {
                 <div className="d-flex ms-auto">
                     <ButtonGroup>
                         <Button
-                            size="sm"
+                            size="md"
                             onClick={() => setLossMode(true)}
                             variant={lossMode ? "primary" : "outline-primary"}
                         >
                             Loss
                         </Button>
                         <Button
-                            size="sm"
+                            size="md"
                             onClick={() => setLossMode(false)}
                             variant={lossMode ? "outline-primary" : "primary"}
                         >
@@ -92,7 +96,11 @@ export const TrainingChartWidget = (props) => {
                 </div>
             </Card.Header>
             <Card.Body className="p-2">
-                <TrainingChart runData={activeRun} lossMode={lossMode} />
+                <TrainingChart
+                    runData={activeRun}
+                    lossMode={lossMode}
+                    size="ct-major-tenth"
+                />
                 <div className="d-flex align-items-center justify-content-center mt-4">
                     {legend.map((d) => (
                         <h6
@@ -112,8 +120,106 @@ export const TrainingChartWidget = (props) => {
     );
 };
 
+export const CompareChartWidget = (props) => {
+    const { title, activeRun1, activeRun2, chartMode, setChartMode } = props;
+
+    const legend = [
+        {
+            id: 0,
+            label: "Test Accuracy",
+            icon: faBullseye,
+            value: "acc_test",
+        },
+        {
+            id: 1,
+            label: "Train Accuracy",
+            icon: faBullseye,
+            value: "acc_train",
+        },
+        {
+            id: 2,
+            label: "Test Loss",
+            icon: faArrowDown,
+            value: "loss_test",
+        },
+        {
+            id: 3,
+            label: "Train Loss",
+            icon: faArrowDown,
+            value: "loss_train",
+        },
+    ];
+
+    const handleClick = (e) => {
+        setChartMode(e.target.value);
+    };
+
+    return (
+        <Card className="bg-secondary-alt shadow-sm">
+            <Card.Header className="d-flex flex-row align-items-center flex-0">
+                <div className="d-block">
+                    <h5 className="fw-normal mb-2">{title}</h5>
+                    <h4>
+                        <span className="text-tertiary">
+                            {activeRun1.title}
+                        </span><br />
+                        <span className="text-quaternary">
+                            {activeRun2.title}
+                        </span>
+                    </h4>
+                </div>
+                <div className="d-flex ms-auto">
+                    <ButtonGroup>
+                        {legend.map((d) => (
+                            <Button
+                                key={`circle-element-${d.id}`}
+                                size="md"
+                                value={d.id}
+                                onClick={(e) => handleClick(e)}
+                                variant={
+                                    chartMode == d.id
+                                        ? "primary"
+                                        : "outline-primary"
+                                }
+                            >
+                                {d.label}
+                            </Button>
+                        ))}
+                    </ButtonGroup>
+                </div>
+            </Card.Header>
+            <Card.Body className="p-2">
+                <ComparisonChart
+                    runData1={activeRun1}
+                    runData2={activeRun2}
+                    metric={legend[chartMode].value}
+                    size="ct-double-octave"
+                />
+                <div className="d-flex align-items-center justify-content-center mt-4">
+                    <h6 className="fw-normal text-gray mx-3">
+                        <FontAwesomeIcon
+                            icon={legend[chartMode].icon}
+                            className={`icon icon-xs text-tertiary w-20 me-1`}
+                        />
+                        {` ${legend[chartMode].label} 1`}
+                    </h6>
+                    <h6 className="fw-normal text-gray mx-3">
+                        <FontAwesomeIcon
+                            icon={legend[chartMode].icon}
+                            className={`icon icon-xs text-quaternary w-20 me-1`}
+                        />
+                        {` ${legend[chartMode].label} 2`}
+                    </h6>
+                </div>
+            </Card.Body>
+        </Card>
+    );
+};
+
 export const ParameterWidget = (props) => {
-    const { expNum, title, data, activeRun, setActiveRun } = props;
+    const { expNum, title, data, activeRun, setActiveRun, setExpNum } = props;
+
+    const experiments = [1, 2, 3, 4];
 
     const disabledFields = {
         0: [],
@@ -201,22 +307,51 @@ export const ParameterWidget = (props) => {
         setActiveRun(data.find((d) => d.title == title));
     };
 
+    const handleExpChange = (e) => {
+        setExpNum(e.target.value);
+    };
+
     return (
         <Card className="bg-secondary-alt shadow-sm">
             <Card.Header className="d-flex flex-row align-items-center justify-items-center flex-0">
                 <div className="d-block">
                     <h5 className="fw-normal mb-2">{title}</h5>
                 </div>
+                {setExpNum && (
+                    <div className="d-flex ms-auto">
+                        <h6>
+                            Experiment
+                            <ButtonGroup className="ms-3">
+                                {experiments.map((d) => (
+                                    <Button
+                                        key={d}
+                                        size="sm"
+                                        value={d}
+                                        onClick={(e) => handleExpChange(e)}
+                                        variant={
+                                            expNum == d
+                                                ? "primary"
+                                                : "outline-primary"
+                                        }
+                                    >
+                                        {d}
+                                    </Button>
+                                ))}
+                            </ButtonGroup>
+                        </h6>
+                    </div>
+                )}
             </Card.Header>
             <Card.Body className="d-flex flex-column align-items-center justify-items-center">
                 <Form className="w-100">
                     <FormGroup className="mb-3">
                         <Form.Label>Run</Form.Label>
-                        <Form.Select onChange={(e) => handleSelectChange(e)}>
+                        <Form.Select
+                            value={activeRun.title}
+                            onChange={(e) => handleSelectChange(e)}
+                        >
                             {data.map((d) => (
-                                <option key={d.title} value={d.title}>
-                                    {d.title}
-                                </option>
+                                <option key={d.title}>{d.title}</option>
                             ))}
                         </Form.Select>
                     </FormGroup>
@@ -224,6 +359,68 @@ export const ParameterWidget = (props) => {
                         <StateButtonGroup title={k} key={k} />
                     ))}
                 </Form>
+            </Card.Body>
+        </Card>
+    );
+};
+
+export const DataSummaryWidget = (props) => {
+    const { activeRun, trainMode } = props;
+    const icon = trainMode ? faGraduationCap : faVial;
+    const color = trainMode ? "quaternary" : "tertiary";
+    const category = trainMode ? "Train Summary" : "Test Summary";
+
+    const [accVar, lossVar] = trainMode
+        ? [activeRun.acc_train, activeRun.loss_train]
+        : [activeRun.acc_test, activeRun.loss_test];
+
+    const accMax = Math.max(...accVar).toFixed(4);
+    const lossMin = Math.min(...lossVar).toFixed(4);
+
+    return (
+        <Card border="light" className="shadow-sm">
+            <Card.Body>
+                <Row className="d-block d-xl-flex align-items-center">
+                    <Col
+                        xl={5}
+                        className="text-xl-center d-flex align-items-center justify-content-xl-center mb-3 mb-xl-0"
+                    >
+                        <div
+                            className={`icon icon-shape icon-xl text-primary rounded me-4 me-sm-0`}
+                        >
+                            <FontAwesomeIcon icon={icon} />
+                        </div>
+                        <div className="d-sm-none">
+                            <h4>{category}</h4>
+                            <h3 className="mb-1">{accMax}</h3>
+                        </div>
+                    </Col>
+                    <Col xs={12} xl={7} className="px-xl-0">
+                        <div className="d-none d-sm-block">
+                            <h4>{category}</h4>
+                            <h5 className="mb-1">
+                                <FontAwesomeIcon
+                                    icon={faBullseye}
+                                    className={`icon icon-xs text-${color} w-20 me-1`}
+                                />
+                                <small className="text-muted">
+                                    Highest Accuracy{" "}
+                                </small>
+                                {accMax}
+                            </h5>
+                            <h5 className="mb-1">
+                                <FontAwesomeIcon
+                                    icon={faArrowDown}
+                                    className={`icon icon-xs text-${color} w-20 me-1`}
+                                />
+                                <small className="text-muted">
+                                    Lowest Loss{" "}
+                                </small>
+                                {lossMin}
+                            </h5>
+                        </div>
+                    </Col>
+                </Row>
             </Card.Body>
         </Card>
     );

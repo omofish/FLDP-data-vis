@@ -41,7 +41,7 @@ export const SentimentChart = (props) => {
 };
 
 export const TrainingChart = (props) => {
-    const { runData, lossMode } = props;
+    const { runData, lossMode, size } = props;
 
     const data = {
         labels: [...Array(75).keys()],
@@ -75,7 +75,47 @@ export const TrainingChart = (props) => {
             data={data}
             options={{ ...options, plugins }}
             type="Line"
-            className="ct-major-tenth"
+            className={size}
+        />
+    );
+};
+
+export const ComparisonChart = (props) => {
+    const { runData1, runData2, metric, size } = props;
+
+    const data = {
+        labels: [...Array(75).keys()],
+        series: [runData1[metric], runData2[metric]]
+    };
+
+    const options = {
+        low: 0,
+        high: metric.substring(0,4) == "loss" ? 2.5 : 1,
+        showArea: false,
+        fullWidth: true,
+        showPoint: true,
+        axisX: {
+            position: "end",
+            showGrid: true,
+            labelInterpolationFnc: function skipLabels(value, index) {
+                return index % 5 === 0 ? value : null;
+            },
+        },
+        axisY: {
+            // On the y-axis start means left and end means right
+            showGrid: false,
+            showLabel: true,
+        },
+    };
+
+    const plugins = [ChartistTooltip()];
+
+    return (
+        <Chartist
+            data={data}
+            options={{ ...options, plugins }}
+            type="Line"
+            className={size}
         />
     );
 };

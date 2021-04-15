@@ -83,14 +83,6 @@ export default (props = {}) => {
                 >
                     <div className="sidebar-inner px-4 pt-3">
                         <Nav className="flex-column pt-3 pt-md-0">
-                            <NavItem
-                                title="Home"
-                                link={Routes.Presentation.path}
-                                icon={faHome}
-                            />
-
-                            <Dropdown.Divider className="my-3 border-indigo" />
-
                             {experimentIcons.map((c) => (
                                 <NavItem
                                     title={c.title}
@@ -103,7 +95,7 @@ export default (props = {}) => {
                             <Dropdown.Divider className="my-3 border-indigo" />
                             <NavItem
                                 title="Compare"
-                                link={Routes.Presentation.path}
+                                link={Routes.Comparison.path}
                                 icon={faSlidersH}
                             />
                         </Nav>

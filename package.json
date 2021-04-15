@@ -1,7 +1,7 @@
 {
-  "name": "cryptoquery",
-  "description": "CryptoQuery helps you find out all you need to know abt crypto tweets",
-  "author": "NTU REP beasts",
+  "name": "@omofish/FLDP-data-vis",
+  "description": "Data Visualization for Personalized FLDP machine learning",
+  "author": "Jason Lee",
   "keywords": [
     "bootstrap 5",
     "react",
@@ -14,13 +14,13 @@
     "themesberg"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/JLIEW008/info-retrieval",
+  "homepage": "https://github.com/omofish/FLDP-data-vis",
   "bugs": {
-    "url": "https://github.com/JLIEW008/info-retrieval/issues"
+    "url": "https://github.com/omofish/FLDP-data-vis/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JLIEW008/info-retrieval"
+    "url": "https://github.com/omofish/FLDP-data-vis"
   },
   "version": "1.0.0",
   "dependencies": {

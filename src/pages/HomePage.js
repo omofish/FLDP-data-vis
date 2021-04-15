@@ -4,18 +4,7 @@ import { Routes } from "../routes";
 
 // pages
 import Presentation from "./Presentation";
-import Upgrade from "./Upgrade";
 import DashboardOverview from "./dashboard/DashboardOverview";
-import Transactions from "./Transactions";
-import Settings from "./Settings";
-import BootstrapTables from "./tables/BootstrapTables";
-import Signin from "./examples/Signin";
-import Signup from "./examples/Signup";
-import ForgotPassword from "./examples/ForgotPassword";
-import ResetPassword from "./examples/ResetPassword";
-import Lock from "./examples/Lock";
-import NotFoundPage from "./examples/NotFound";
-import ServerError from "./examples/ServerError";
 
 // components
 import Sidebar from "../components/Sidebar";
@@ -51,21 +40,6 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
         return () => clearTimeout(timer);
     }, []);
 
-    // const localStorageIsSettingsVisible = () => {
-    //     return localStorage.getItem("settingsVisible") === "false"
-    //         ? false
-    //         : true;
-    // };
-
-    // const [showSettings, setShowSettings] = useState(
-    //     localStorageIsSettingsVisible
-    // );
-
-    // const toggleSettings = () => {
-    //     setShowSettings(!showSettings);
-    //     localStorage.setItem("settingsVisible", !showSettings);
-    // };
-
     return (
         <Route
             {...rest}
@@ -75,9 +49,7 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
                     <Sidebar />
 
                     <main className="content">
-                        {/* <Navbar /> */}
                         <Component {...props} />
-                        {/* <Footer toggleSettings={toggleSettings} showSettings={showSettings} /> */}
                     </main>
                 </>
             )}
@@ -102,53 +74,5 @@ export default () => (
             path={`${Routes.DashboardOverview.path}/:id`}
             component={DashboardOverview}
         />
-
-        <RouteWithLoader exact path={Routes.Signin.path} component={Signin} />
-        <RouteWithLoader exact path={Routes.Signup.path} component={Signup} />
-        <RouteWithLoader
-            exact
-            path={Routes.ForgotPassword.path}
-            component={ForgotPassword}
-        />
-        <RouteWithLoader
-            exact
-            path={Routes.ResetPassword.path}
-            component={ResetPassword}
-        />
-        <RouteWithLoader exact path={Routes.Lock.path} component={Lock} />
-        <RouteWithLoader
-            exact
-            path={Routes.NotFound.path}
-            component={NotFoundPage}
-        />
-        <RouteWithLoader
-            exact
-            path={Routes.ServerError.path}
-            component={ServerError}
-        />
-
-        {/* pages */}
-        <RouteWithSidebar
-            exact
-            path={Routes.Upgrade.path}
-            component={Upgrade}
-        />
-        <RouteWithSidebar
-            exact
-            path={Routes.Transactions.path}
-            component={Transactions}
-        />
-        <RouteWithSidebar
-            exact
-            path={Routes.Settings.path}
-            component={Settings}
-        />
-        <RouteWithSidebar
-            exact
-            path={Routes.BootstrapTables.path}
-            component={BootstrapTables}
-        />
-
-        <Redirect to={Routes.NotFound.path} />
     </Switch>
 );

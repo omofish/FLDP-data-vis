@@ -26,19 +26,175 @@ import {
     Button,
     ListGroup,
     ProgressBar,
+    ButtonGroup,
+    FormGroup,
+    Form,
 } from "@themesberg/react-bootstrap";
 import {
     CircleChart,
     BarChart,
     SentimentChart,
     SalesValueChartphone,
+    TrainingChart,
 } from "./Charts";
+import { match, partial } from "match-json";
 
 import Profile1 from "../assets/img/team/profile-picture-1.jpg";
 import ProfileCover from "../assets/img/profile-cover.jpg";
-import { TagCloud } from "react-tagcloud";
 
 import teamMembers from "../data/teamMembers";
+
+import allStates from "../data/parameters";
+
+export const TrainingChartWidget = (props) => {
+    const { title, data, activeRun } = props;
+
+    const runData = data.find((x) => x.title === activeRun);
+
+    return (
+        <Card className="bg-secondary-alt shadow-sm">
+            <Card.Header className="d-flex flex-row align-items-center flex-0">
+                <div className="d-block">
+                    <h5 className="fw-normal mb-2">{title}</h5>
+                    <h3>{activeRun}</h3>
+                </div>
+                <div className="d-flex ms-auto">
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        className="me-2"
+                        onClick={() => alert(runData.acc_test)}
+                    >
+                        Month
+                    </Button>
+                </div>
+            </Card.Header>
+            <Card.Body className="p-2">
+                <TrainingChart runData={runData} />
+            </Card.Body>
+        </Card>
+    );
+};
+
+export const ParameterWidget = (props) => {
+    const { expNum, title, data, activeRun, setActiveRun } = props;
+
+    const state = data.find((d) => d.title == activeRun);
+
+    const disabledFields = {
+        0: [],
+        1: ["sigma", "sel_k"],
+        2: ["dataset", "DP", "lr", "sel_k"],
+        3: ["dataset", "DP", "lr", "sigma", "sel_k"],
+        4: ["dataset", "DP", "lr", "sigma", "n_per"],
+    };
+
+    const isMatch = (newState, newRun) => {
+        let match = true;
+        const comparisonProps = [
+            "dataset",
+            "DP",
+            "lr",
+            "n_per",
+            "sel_k",
+            "sigma",
+        ];
+        if (expNum == 1) {
+            comparisonProps.pop();
+        }
+        comparisonProps.forEach((prop) => {
+            if (newState[prop] != newRun[prop]) {
+                match = false;
+            }
+        });
+        return match;
+    };
+
+    const handleInputChange = (e) => {
+        const target = e.target;
+        const name = target.name;
+        const value = target.value;
+        const newState = { ...state, [name]: value };
+        const newRun = data.find((x) => isMatch(newState, x));
+        console.log(newRun);
+        setActiveRun(newRun.title);
+    };
+
+    const StateButtonGroup = (props) => {
+        const { title } = props;
+        return (
+            <>
+                <FormGroup className="mb-3">
+                    <Form.Label>{allStates[title].display}</Form.Label>
+                    <ButtonGroup className="w-100">
+                        {allStates[title].states.map((m) => (
+                            <Button
+                                name={title}
+                                key={m}
+                                value={m}
+                                onClick={(e) => handleInputChange(e)}
+                                variant={
+                                    state[title] === m
+                                        ? "primary"
+                                        : "outline-primary"
+                                }
+                                disabled={
+                                    // just for that one per setting :)
+                                    m === "4" &&
+                                    title === "n_per" &&
+                                    (expNum === "2" || expNum === "1")
+                                        ? true
+                                        : m === "1.1" &&
+                                          title === "sigma" &&
+                                          expNum === "2"
+                                        ? true
+                                        : disabledFields[expNum].includes(title)
+                                        ? true
+                                        : false
+                                }
+                            >
+                                {m}
+                            </Button>
+                        ))}
+                    </ButtonGroup>
+                </FormGroup>
+            </>
+        );
+    };
+
+    const handleSelectChange = (e) => {
+        const title = e.target.value;
+        setActiveRun(e.target.value);
+        setActiveRun(data.find((d) => d.title == title));
+    };
+
+    return (
+        <Card className="bg-secondary-alt shadow-sm">
+            <Card.Header className="d-flex flex-row align-items-center justify-items-center flex-0">
+                <div className="d-block">
+                    <h5 className="fw-normal mb-2">{title}</h5>
+                </div>
+            </Card.Header>
+            <Card.Body className="d-flex flex-column align-items-center justify-items-center">
+                <Form className="w-100">
+                    <FormGroup className="mb-3">
+                        <Form.Label>Run</Form.Label>
+                        <Form.Select onChange={(e) => handleSelectChange(e)}>
+                            {data.map((d) => (
+                                <option key={d.title} value={d.title}>
+                                    {d.title}
+                                </option>
+                            ))}
+                        </Form.Select>
+                    </FormGroup>
+                    {Object.keys(allStates).map((k) => (
+                        <StateButtonGroup title={k} key={k} />
+                    ))}
+                </Form>
+            </Card.Body>
+        </Card>
+    );
+};
 
 export const SummaryWidget = (props) => {
     const { title, value, count, data, legend = [] } = props;
@@ -161,23 +317,6 @@ export const SentimentCircleWidget = (props) => {
                         ))}
                     </Col>
                 </Row>
-            </Card.Body>
-        </Card>
-    );
-};
-
-export const WordCloudWidget = (props) => {
-    const { title, data } = props;
-
-    return (
-        <Card border="light" className="text-center p-0 mb-4">
-            <Card.Header className="d-flex flex-row align-items-center flex-0">
-                <div className="d-block">
-                    <h5>{title}</h5>
-                </div>
-            </Card.Header>
-            <Card.Body className="pb-5">
-                <TagCloud minSize={12} maxSize={35} tags={data} />
             </Card.Body>
         </Card>
     );

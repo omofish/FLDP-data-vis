@@ -3,10 +3,10 @@ import SimpleBar from "simplebar-react";
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Badge, Image, Dropdown } from "@themesberg/react-bootstrap";
 import { Link } from "react-router-dom";
-import { cryptoIcons } from "../data/cryptoIcons";
+import { experimentIcons } from "../data/experimentIcons";
 import { Routes } from "../routes";
 
 export default (props = {}) => {
@@ -91,13 +91,21 @@ export default (props = {}) => {
 
                             <Dropdown.Divider className="my-3 border-indigo" />
 
-                            {cryptoIcons.map((c) => (
+                            {experimentIcons.map((c) => (
                                 <NavItem
                                     title={c.title}
-                                    link={`${Routes.DashboardOverview.path}/${c.title}`}
-                                    image={c.image}
+                                    link={`${Routes.DashboardOverview.path}/${c.id}`}
+                                    icon={c.icon}
+                                    key={c.id}
                                 />
                             ))}
+
+                            <Dropdown.Divider className="my-3 border-indigo" />
+                            <NavItem
+                                title="Compare"
+                                link={Routes.Presentation.path}
+                                icon={faSlidersH}
+                            />
                         </Nav>
                     </div>
                 </SimpleBar>

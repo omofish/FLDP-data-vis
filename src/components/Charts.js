@@ -2,9 +2,10 @@ import React from "react";
 import Chartist from "react-chartist";
 import ChartistTooltip from "chartist-plugin-tooltips-updated";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button } from "@themesberg/react-bootstrap";
 
 export const SentimentChart = (props) => {
-    const { data} = props;
+    const { data } = props;
 
     const options = {
         low: 0,
@@ -39,25 +40,31 @@ export const SentimentChart = (props) => {
     );
 };
 
-export const SalesValueChart = () => {
+export const TrainingChart = (props) => {
+    const { runData } = props;
+
     const data = {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        series: [[1, 2, 2, 3, 3, 4, 3]],
+        labels: [...Array(75).keys()],
+        series: [runData.acc_test, runData.acc_train],
     };
 
     const options = {
         low: 0,
-        showArea: true,
+        high: 1,
+        showArea: false,
         fullWidth: true,
+        showPoint: true,
         axisX: {
             position: "end",
             showGrid: true,
+            labelInterpolationFnc: function skipLabels(value, index) {
+                return index % 5 === 0 ? value : null;
+            },
         },
         axisY: {
             // On the y-axis start means left and end means right
             showGrid: false,
-            showLabel: false,
-            labelInterpolationFnc: (value) => `$${value / 1}k`,
+            showLabel: true,
         },
     };
 
@@ -68,7 +75,7 @@ export const SalesValueChart = () => {
             data={data}
             options={{ ...options, plugins }}
             type="Line"
-            className="ct-series-g ct-double-octave"
+            className="ct-major-tenth"
         />
     );
 };

@@ -7,22 +7,22 @@ import {
 
 export const experimentIcons = [
     {
-        title: "Experiment 1",
+        title: "1 Dataset & DP",
         icon: faDiceOne,
         id: 1
     },
     {
-        title: "Experiment 2",
+        title: "2 Noise Sigma",
         icon: faDiceTwo,
         id: 2
     },
     {
-        title: "Experiment 3",
+        title: "3 Personalization",
         icon: faDiceThree,
         id: 3
     },
     {
-        title: "Experiment 4",
+        title: "4 Selection",
         icon: faDiceFour,
         id: 4
     },

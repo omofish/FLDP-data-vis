@@ -73,6 +73,7 @@ export default () => {
                                             )}
                                             activeRun={activeRun}
                                             setActiveRun={setActiveRun}
+                                            color={"primary"}
                                         />
                                     </Col>
                                 </Row>

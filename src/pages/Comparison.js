@@ -59,20 +59,22 @@ export default () => {
                                 <ParameterWidget
                                     expNum={expNum1}
                                     setExpNum={setExpNum1}
-                                    title={"Parameters 1"}
+                                    title={`1 ${activeRun1.title}`}
                                     data={data.filter((x) => x.exp == expNum1)}
                                     activeRun={activeRun1}
                                     setActiveRun={setActiveRun1}
+                                    color={"tertiary"}
                                 />
                             </Col>
                             <Col xs={12} xl={6} className="mb-4">
                                 <ParameterWidget
                                     expNum={expNum2}
                                     setExpNum={setExpNum2}
-                                    title={"Parameters 2"}
+                                    title={`2 ${activeRun2.title}`}
                                     data={data.filter((x) => x.exp == expNum2)}
                                     activeRun={activeRun2}
                                     setActiveRun={setActiveRun2}
+                                    color={"quaternary"}
                                 />
                             </Col>
                         </Row>

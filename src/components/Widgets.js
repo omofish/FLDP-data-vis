@@ -188,7 +188,7 @@ export const CompareChartWidget = (props) => {
 };
 
 export const ParameterWidget = (props) => {
-    const { expNum, title, data, activeRun, setActiveRun, setExpNum } = props;
+    const { expNum, title, data, activeRun, setActiveRun, setExpNum, color } = props;
 
     const experiments = [1, 2, 3, 4];
 
@@ -246,8 +246,8 @@ export const ParameterWidget = (props) => {
                                 onClick={(e) => handleInputChange(e)}
                                 variant={
                                     activeRun[title] === m
-                                        ? "primary"
-                                        : "outline-primary"
+                                        ? `primary`
+                                        : `outline-primary`
                                 }
                                 disabled={
                                     // just for that one per setting :)
@@ -284,13 +284,13 @@ export const ParameterWidget = (props) => {
 
     return (
         <Card className="bg-secondary-alt shadow-sm">
-            <Card.Header className="d-flex flex-row align-items-center justify-items-center flex-0">
+            <Card.Header className={`d-flex flex-row align-items-center justify-items-center flex-0 bg-${color}`}>
                 <div className="d-block">
-                    <h5 className="fw-normal mb-2">{title}</h5>
+                    <h5 className="text-light mb-2">{title}</h5>
                 </div>
                 {setExpNum && (
                     <div className="d-flex ms-auto">
-                        <h6>
+                        <h6 className="text-light">
                             Experiment
                             <ButtonGroup className="ms-3">
                                 {experiments.map((d) => (
@@ -301,8 +301,8 @@ export const ParameterWidget = (props) => {
                                         onClick={(e) => handleExpChange(e)}
                                         variant={
                                             expNum == d
-                                                ? "primary"
-                                                : "outline-primary"
+                                                ? "light"
+                                                : "outline-light"
                                         }
                                     >
                                         {d}
